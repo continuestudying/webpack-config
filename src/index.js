@@ -1,9 +1,7 @@
-import ('/styles/index.scss');
+import { createRoot } from 'react-dom/client';
+import App from './components/App';
 
-const testData = {
-  name: "Webpack projet",
-  version: "1",
-  description: "This is the first demo for webpack"
-}
 
-console.log(testData);
+const rootNode = document.getElementById('root');
+const root = createRoot(rootNode);
+root.render(<App />);

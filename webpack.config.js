@@ -10,6 +10,7 @@ if (process.env.NODE_ENV === "production") {
 module.exports = {
   mode: mode,
   target: target,
+
   module: {
     rules: [
       {
@@ -22,7 +23,7 @@ module.exports = {
         ],
       },
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         exclude: /node_modules/,
         use: {
           loader: "babel-loader",
@@ -30,9 +31,16 @@ module.exports = {
       },
     ],
   },
+
   plugins: [new MiniCSSExtractPlugin()],
+  
+  resolve: {
+    extensions: [".js", ".jsx"]
+  },
+
   devtool: "source-map",
   devServer: {
     static: "./dist",
+    hot: true
   },
 };
