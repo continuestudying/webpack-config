@@ -1,4 +1,8 @@
+const path = require('path');
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
+const HTMLWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+
 let mode = "development";
 let target = "web";
 
@@ -11,12 +15,24 @@ module.exports = {
   mode: mode,
   target: target,
 
+  output: {
+    path: path.resolve(__dirname, "dist"),
+    assetModuleFilename: "images/[hash][ext][query]",
+  },
+
   module: {
     rules: [
       {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        type: "asset/resource",
+      },
+      {
         test: /\.(s[ac]|c)ss/i,
         use: [
-          MiniCSSExtractPlugin.loader,
+          {
+            loader: MiniCSSExtractPlugin.loader,
+            options: { publicPath: "" },
+          },
           "css-loader",
           "postcss-loader",
           "sass-loader",
@@ -32,15 +48,21 @@ module.exports = {
     ],
   },
 
-  plugins: [new MiniCSSExtractPlugin()],
-  
+  plugins: [
+    new CleanWebpackPlugin(),
+    new MiniCSSExtractPlugin(),
+    new HTMLWebpackPlugin({
+      template: "./src/index.html",
+    }),
+  ],
+
   resolve: {
-    extensions: [".js", ".jsx"]
+    extensions: [".js", ".jsx"],
   },
 
   devtool: "source-map",
   devServer: {
     static: "./dist",
-    hot: true
+    hot: true,
   },
 };
